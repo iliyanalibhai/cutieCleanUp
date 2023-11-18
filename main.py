@@ -26,7 +26,7 @@ map_rect = map_image.get_rect(center=(width // 2, height // 2))
 
 # orange image
 
-orange_image = pygame.image.load('orange.png')  # Replace with your orange image file name
+orange_image = pygame.image.load('character.png')  # Replace with your orange image file name
 orange_rect = orange_image.get_rect(top=50, left=50)  # Initial position of the orange
 
 # orange functionality
@@ -90,10 +90,19 @@ while running:
             if button_x <= mouse_pos[0] <= button_x + button_width and button_y <= mouse_pos[1] <= button_y + button_height:
                 print("Starting the game...")  # Replace with your game logic
                 game_started = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                orange.move(-1, 0)  # Move left
+            elif event.key == pygame.K_RIGHT:
+                orange.move(1, 0)  # Move right
+            elif event.key == pygame.K_UP:
+                orange.move(0, -1)  # Move up
+            elif event.key == pygame.K_DOWN:
+                orange.move(0, 1)  # Move down
     if game_started:
         screen.blit(map_image, map_rect)
         orange.draw(screen)
-
+        
     pygame.display.flip()
     clock.tick(60)
 
