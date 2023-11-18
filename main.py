@@ -19,6 +19,11 @@ azureBlue = (0, 127, 255)
 green = (0, 255, 0)
 dark_green = (0, 200, 0)
 
+# map image
+
+map_image = pygame.image.load('map.png')  # Replace with your map image file name
+map_rect = map_image.get_rect(center=(width // 2, height // 2))
+
 
 # Create a font object
 font = pygame.font.SysFont('comicsansms', 120)
@@ -37,6 +42,7 @@ button_text = button_font.render('Play', True, white)
 button_text_rect = button_text.get_rect(center=(button_x + button_width // 2, button_y + button_height // 2))
 
 running = True
+game_started = False
 while running:
     screen.fill(azureBlue)  # Fill the screen with azure blue
 
@@ -63,6 +69,9 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if button_x <= mouse_pos[0] <= button_x + button_width and button_y <= mouse_pos[1] <= button_y + button_height:
                 print("Starting the game...")  # Replace with your game logic
+                game_started = True
+    if game_started:
+        screen.blit(map_image, map_rect)
 
     pygame.display.flip()
     clock.tick(60)
