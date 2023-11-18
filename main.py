@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 
 # Define colors
 white = (255, 255, 255)
-orange = (255, 165, 0)
+orange_color = (255, 165, 0)
 blue = (0, 0, 255)
 azureBlue = (0, 127, 255)
 green = (0, 255, 0)
@@ -24,10 +24,30 @@ dark_green = (0, 200, 0)
 map_image = pygame.image.load('map.png')  # Replace with your map image file name
 map_rect = map_image.get_rect(center=(width // 2, height // 2))
 
+# orange image
+
+orange_image = pygame.image.load('orange.png')  # Replace with your orange image file name
+orange_rect = orange_image.get_rect(top=50, left=50)  # Initial position of the orange
+
+# orange functionality
+
+class Orange:
+    def __init__(self, x, y):
+        self.rect = orange_rect
+        self.speed = 5
+        self.rect.topleft = (x, y)
+
+    def move(self, dx, dy):
+        self.rect.x += dx * self.speed
+        self.rect.y += dy * self.speed
+
+    def draw(self, surface):
+        surface.blit(orange_image, self.rect)
+orange = Orange(50, 50)
 
 # Create a font object
 font = pygame.font.SysFont('comicsansms', 120)
-text = font.render('Cutie Clean-up', True, orange, None)  # Set background color to None
+text = font.render('Cutie Clean-up', True, orange_color, None)  # Set background color to None
 textRect = text.get_rect(center=(width // 2, height // 3))
 
 # Define button dimensions and positions
@@ -72,6 +92,7 @@ while running:
                 game_started = True
     if game_started:
         screen.blit(map_image, map_rect)
+        orange.draw(screen)
 
     pygame.display.flip()
     clock.tick(60)
