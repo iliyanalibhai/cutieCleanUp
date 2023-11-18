@@ -19,9 +19,10 @@ azureBlue = (0, 127, 255)
 green = (0, 255, 0)
 dark_green = (0, 200, 0)
 
+
 # Create a font object
-font = pygame.font.SysFont('comicsansms', 30)
-text = font.render('Cutie Clean-up', True, orange, blue)
+font = pygame.font.SysFont('comicsansms', 120)
+text = font.render('Cutie Clean-up', True, orange, None)  # Set background color to None
 textRect = text.get_rect(center=(width // 2, height // 3))
 
 # Define button dimensions and positions
