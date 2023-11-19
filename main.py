@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Initialize pygame
 pygame.init()
@@ -21,12 +22,12 @@ dark_green = (0, 200, 0)
 
 # map image
 
-map_image = pygame.image.load('map.png')  # Replace with your map image file name
+map_image = pygame.image.load('map.png') 
 map_rect = map_image.get_rect(center=(width // 2, height // 2))
 
 # orange image
 
-orange_image = pygame.image.load('character.png')  # Replace with your orange image file name
+orange_image = pygame.image.load('character.png')  #
 orange_rect = orange_image.get_rect(top=50, left=50)  # Initial position of the orange
 
 # orange functionality
@@ -34,7 +35,7 @@ orange_rect = orange_image.get_rect(top=50, left=50)  # Initial position of the 
 class Orange:
     def __init__(self, x, y):
         self.rect = orange_rect
-        self.speed = 5
+        self.speed = 30
         self.rect.topleft = (x, y)
 
     def move(self, dx, dy):
@@ -44,6 +45,62 @@ class Orange:
     def draw(self, surface):
         surface.blit(orange_image, self.rect)
 orange = Orange(50, 50)
+
+
+# Waterbottle object
+class WaterBottle:
+    def __init__(self, x, y):
+        self.image = pygame.image.load('waterbottle.PNG')  
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.speed = 5
+
+    def move(self):
+        # Randomly move the water bottle in a random direction
+        direction = random.choice(['up', 'down', 'left', 'right'])
+        if direction == 'up':
+            self.rect.y -= self.speed
+        elif direction == 'down':
+            self.rect.y += self.speed
+        elif direction == 'left':
+            self.rect.x -= self.speed
+        elif direction == 'right':
+            self.rect.x += self.speed
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+# Initialize the water bottle object
+water_bottle = WaterBottle(random.randint(0, width - 50), random.randint(0, height - 50))
+
+# Ciggarette Butt object
+
+class Ciggarette:
+    def __init__(self, x, y):
+        self.image = pygame.image.load('ciggarette.PNG')  
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.speed = 5
+
+    def move(self):
+        # Randomly move the ciggarette in a random direction
+        direction = random.choice(['up', 'down', 'left', 'right'])
+        if direction == 'up':
+            self.rect.y -= self.speed
+        elif direction == 'down':
+            self.rect.y += self.speed
+        elif direction == 'left':
+            self.rect.x -= self.speed
+        elif direction == 'right':
+            self.rect.x += self.speed
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+# Initialize the ciggarette bottle object
+Ciggarette = Ciggarette(random.randint(0, width - 50), random.randint(0, height - 50))
+
+
 
 # Create a font object
 font = pygame.font.SysFont('comicsansms', 120)
@@ -102,6 +159,9 @@ while running:
     if game_started:
         screen.blit(map_image, map_rect)
         orange.draw(screen)
+        # water_bottle.move()  # Move the water bottle randomly
+        water_bottle.draw(screen)  # Draw the water bottle
+        Ciggarette.draw(screen)
         
     pygame.display.flip()
     clock.tick(60)
