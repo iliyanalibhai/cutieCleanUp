@@ -23,16 +23,55 @@ green = (0, 255, 0)
 dark_green = (0, 200, 0)
 bright_orange = (255,95,31)
 
+# trashcan image 
+
+trashcan_image = pygame.image.load('th.png')  
+new_width = 100  
+new_height = 100 
+trashcan_image = pygame.transform.scale(trashcan_image, (new_width, new_height))  
+
+
+
+
+
+trashcan_rect = trashcan_image.get_rect(topleft=(20, 20))  
+
+
+# people image
+
+people_image = pygame.image.load('people.png')
+new_width = 100  
+new_height = 100 
+people_image = pygame.transform.scale(people_image, (new_width, new_height))
+
+people_rect = people_image.get_rect(topright=(780, 20))  
+
+
+
 # map image
 
 map_image = pygame.image.load('map.png') 
 map_rect = map_image.get_rect(center=(width // 2, height // 2))
 
 
+
+
 # Final Screen
 
 final_screen = pygame.image.load("Finalscreen.PNG")
 final_screen_rect = final_screen.get_rect(center=(width // 2, height // 2))
+
+
+# back to menu button
+
+back_button_width = 200
+back_button_height = 50
+back_button_x = (width // 2) - (back_button_width // 2)
+back_button_y = (height // 2) + 50  
+
+back_button_font = pygame.font.SysFont('Corbel', 35)
+back_button_text = back_button_font.render('Return To Main Menu', True, white)
+back_button_text_rect = back_button_text.get_rect(center=(back_button_x + back_button_width // 2, back_button_y + back_button_height // 2))
 
 
 # orange image
@@ -130,9 +169,36 @@ button_font = pygame.font.SysFont('Corbel', 35)
 button_text = button_font.render('Play', True, white)
 button_text_rect = button_text.get_rect(center=(button_x + button_width // 2, button_y + button_height // 2))
 
+def display_pink_text_box(surface, text):
+    # Pink text box properties
+    text_box_color = (255, 192, 203)  # Pink color
+    text_box_width = 700  
+    text_box_height = 150  # Increased box height
+    text_box_x = (width // 2) - (text_box_width // 2)
+    text_box_y = (height // 2) + (height // 4) 
+
+    # Create font for the pink text box
+    pink_font = pygame.font.SysFont('Arial', 18)  # Smaller text size
+    pink_text_rendered = pink_font.render(text, True, white)  # Render the text
+
+    # Draw the pink text box
+    pygame.draw.rect(surface, text_box_color, (text_box_x, text_box_y, text_box_width, text_box_height))
+    surface.blit(pink_text_rendered, (text_box_x + 20, text_box_y + 20))  
+
 running = True
 game_started = False
 tip_displayed = False
+show_back_button = False
+running_game = False
+restart_game = False
+
+screen.blit(trashcan_image, trashcan_rect)
+
+def reset_game():
+    global game_started, tip_displayed, show_back_button
+    game_started = False
+    tip_displayed = False
+    show_back_button = False
 
 while running:
     screen.fill(azureBlue)  # Fill the screen with azure blue
@@ -149,9 +215,20 @@ while running:
         pygame.draw.rect(screen, green, (button_x, button_y, button_width, button_height))
     else:
         pygame.draw.rect(screen, dark_green, (button_x, button_y, button_width, button_height))
+        
 
     # Show button text
     screen.blit(button_text, button_text_rect)
+
+    # Show trashcan
+    screen.blit(trashcan_image, trashcan_rect)
+
+    # Show people
+    screen.blit(people_image,people_rect)
+
+    display_pink_text_box(screen, "Run around as Cutie the Orange and pick up trash in the ocean. Save the Earth!")
+
+
 
     # Event handling
     for event in pygame.event.get():
@@ -161,6 +238,8 @@ while running:
             if button_x <= mouse_pos[0] <= button_x + button_width and button_y <= mouse_pos[1] <= button_y + button_height:
                 print("Starting the game...") 
                 game_started = True
+            elif back_button_x <= mouse_pos[0] <= back_button_x + back_button_width and back_button_y <= mouse_pos[1] <= back_button_y + back_button_height:
+                reset_game()  # Reset the game when the back button is clicked
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 orange.move(-1, 0)  # Move left
@@ -193,7 +272,11 @@ while running:
         if tip_displayed:
             screen.blit(final_screen, final_screen_rect)
             screen.blit(tip_text, (50, height // 1.5))  # Adjust position as needed
-                
+            show_back_button = True
+        if show_back_button:
+            pygame.draw.rect(screen, dark_green, (back_button_x, back_button_y, back_button_width, back_button_height))
+            screen.blit(back_button_text, back_button_text_rect)
+                    
     pygame.display.flip()
     clock.tick(60)
 
