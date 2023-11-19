@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 
+from pollutionTips import tips
+
 # Initialize pygame
 pygame.init()
 
@@ -19,11 +21,19 @@ blue = (0, 0, 255)
 azureBlue = (0, 127, 255)
 green = (0, 255, 0)
 dark_green = (0, 200, 0)
+bright_orange = (255,95,31)
 
 # map image
 
 map_image = pygame.image.load('map.png') 
 map_rect = map_image.get_rect(center=(width // 2, height // 2))
+
+
+# Final Screen
+
+final_screen = pygame.image.load("Finalscreen.PNG")
+final_screen_rect = final_screen.get_rect(center=(width // 2, height // 2))
+
 
 # orange image
 
@@ -71,7 +81,9 @@ class WaterBottle:
         surface.blit(self.image, self.rect)
 
 # Initialize the water bottle object
-water_bottle = WaterBottle(random.randint(0, width - 50), random.randint(0, height - 50))
+middle_bottom_range = (height // 3) * 2
+water_bottle = WaterBottle(random.randint(0, width - 50), random.randint(height // 2, middle_bottom_range))
+
 
 # Ciggarette Butt object
 
@@ -98,7 +110,7 @@ class Ciggarette:
         surface.blit(self.image, self.rect)
 
 # Initialize the ciggarette bottle object
-Ciggarette = Ciggarette(random.randint(0, width - 50), random.randint(0, height - 50))
+Ciggarette = Ciggarette(random.randint(0, width - 50), random.randint(height // 2, middle_bottom_range))
 
 
 
@@ -120,6 +132,8 @@ button_text_rect = button_text.get_rect(center=(button_x + button_width // 2, bu
 
 running = True
 game_started = False
+tip_displayed = False
+
 while running:
     screen.fill(azureBlue)  # Fill the screen with azure blue
 
@@ -145,7 +159,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if button_x <= mouse_pos[0] <= button_x + button_width and button_y <= mouse_pos[1] <= button_y + button_height:
-                print("Starting the game...")  # Replace with your game logic
+                print("Starting the game...") 
                 game_started = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
@@ -162,7 +176,24 @@ while running:
         # water_bottle.move()  # Move the water bottle randomly
         water_bottle.draw(screen)  # Draw the water bottle
         Ciggarette.draw(screen)
+            # Check for collisions between orange and objects
+       # Check for collisions between orange and objects
+        if orange.rect.colliderect(water_bottle.rect) and not tip_displayed:
+            random_tip = random.choice(tips)
+            tip_font = pygame.font.SysFont('Arial', 22)
+            tip_text = tip_font.render(random_tip, True, bright_orange)
+            tip_displayed = True  # Set the flag to True once the tip is displayed
         
+        if orange.rect.colliderect(Ciggarette.rect) and not tip_displayed:
+            random_tip = random.choice(tips)
+            tip_font = pygame.font.SysFont('Arial', 22)
+            tip_text = tip_font.render(random_tip, True, bright_orange)
+            tip_displayed = True  # Set the flag to True once the tip is displayed
+
+        if tip_displayed:
+            screen.blit(final_screen, final_screen_rect)
+            screen.blit(tip_text, (50, height // 1.5))  # Adjust position as needed
+                
     pygame.display.flip()
     clock.tick(60)
 
