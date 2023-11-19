@@ -64,7 +64,7 @@ final_screen_rect = final_screen.get_rect(center=(width // 2, height // 2))
 
 # back to menu button
 
-back_button_width = 200
+back_button_width = 400
 back_button_height = 50
 back_button_x = (width // 2) - (back_button_width // 2)
 back_button_y = (height // 2) + 50  
@@ -192,6 +192,7 @@ show_back_button = False
 running_game = False
 restart_game = False
 
+
 screen.blit(trashcan_image, trashcan_rect)
 
 def reset_game():
@@ -240,6 +241,7 @@ while running:
                 game_started = True
             elif back_button_x <= mouse_pos[0] <= back_button_x + back_button_width and back_button_y <= mouse_pos[1] <= back_button_y + back_button_height:
                 reset_game()  # Reset the game when the back button is clicked
+                restart_game = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 orange.move(-1, 0)  # Move left
@@ -274,9 +276,11 @@ while running:
             screen.blit(tip_text, (50, height // 1.5))  # Adjust position as needed
             show_back_button = True
         if show_back_button:
-            pygame.draw.rect(screen, dark_green, (back_button_x, back_button_y, back_button_width, back_button_height))
-            screen.blit(back_button_text, back_button_text_rect)
-                    
+                pygame.draw.rect(screen, dark_green, (back_button_x, back_button_y, back_button_width, back_button_height))
+                screen.blit(back_button_text, back_button_text_rect)
+                if restart_game:
+                    reset_game()
+                    restart_game = True
     pygame.display.flip()
     clock.tick(60)
 
